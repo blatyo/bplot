@@ -1,4 +1,107 @@
-bplot
+BPlot
 =====
 
-A 2D and 3D plotting module for SciRuby.
+BPlot is a 2D and 3D plotting module for SciRuby. It
+provides an API familiar to Gnuplot users and to a lesser
+extent Matlab users.
+
+
+                 \     /
+             \    o ^ o    /
+               \ (     ) /
+    ____________(%%%%%%%)____________
+   (     /   /  )%%%%%%%(  \   \     )
+   (___/___/__/           \__\___\___)
+      (     /  /(%%%%%%%)\  \     )
+       (__/___/ (%%%%%%%) \___\__)      A hard-working bee.
+               /(       )\
+             /   (%%%%%)   \
+                  (%%%)
+                    !
+
+SUMMARY / STATUS
+================
+
+BPlot is in ALPHA status. Two dimmensional plots seem to work
+well but they really need more testing. Surface plots and some
+other features are not implemented yet.
+
+BPlot uses Gnuplot as the plotting engine, so you need to have
+Gnuplot installed and in your PATH. BPlot lets you use straight
+Gnuplot commands, but it also borrows some useful style syntax
+from Matlab to make plotting even better.
+
+To install, I think 'gem install bplot' should do it. There are
+no pre-requisites, as BPLot can work with either NMatrix objects
+or with plain ruby arrays. That said, plotting is much easier
+with NMatrix objects.
+
+Try some of the commands below to get a feel of how it works.
+
+
+EXAMPLES: 2D PLOTS
+==================
+
+require 'bplot'
+
+x = [1,2,3,4,5]
+y = [1,4,9,16,25]
+z = [25,20,15,10,5]
+
+b = BPlot.new
+
+#
+# Send a raw command into Gnuplot.
+#
+b.cmd('plot sin(x) title "Plot without Ruby."')
+
+
+#
+# Gnuplot 'set' command.
+#
+b.set('xrange [0:6]')
+b.set('yrange [0:30]')
+b.set('title "Heading for the entire plot"')
+
+
+#
+# Gnuplot 'replot' command.
+#
+b.replot
+
+
+#
+# Basic plots.
+#
+b.plot(x, y)
+b.plot(x, y, 'ps 2', 'rh')
+b.plot(x, y, 'ps 2', 'rh..-', 'y = x^2')
+
+#
+# The 'with' command on the gnuplot string takes precedence.
+#
+b.plot(x, y, 'ps 2 w lp', 'rh')
+b.plot(x, y, 'ps 2 with steps', 'rh')
+
+
+#
+# Named parameters.
+#
+b.plot(x, y, :title => 'Density', :gnuplot => 'lc 3 ps 1.5 lt 4 pt 5 w lp')
+b.plot(x, y, :title => 'Density', :gnuplot => 'ps 1.5', :matlab => 'rh-')
+b.plot(x, y, :t => 'Mass', :g => 'ps 2.5', :m => 'bh--')
+
+
+#
+# Multiple data sets (need not be the same length).
+#
+b.plot(x, y, 'ps 2', 'rh-', x, z, 'ps 1.5', 'bs--')
+b.plot(x, y, 'ps 2', 'rh-', 'Quadratic', x, z, 'ps 1.5', 'bs--', 'Linear')
+
+
+# Observe that named parameters must be at the end. Hence, they only apply to the last plot.
+
+b.plot(x, y, 'ps 2', 'rh-',       'Quadratic', x, z, 'ps 1.5', 'bs--', :t => 'Linear') # OK.
+b.plot(x, y, 'ps 2', 'rh-', :t => 'Quadratic', x, z, 'ps 1.5', 'bs--',       'Linear') # ERROR.
+
+
