@@ -20,6 +20,8 @@
 * Replaced the "replot" command with "refresh" which is more appropiate
   for plotting data streams like BPLot does.
 
+* New command: show
+
 === Version 0.0.1
 
 * Initial release of BPlot using Gnuplot as a backend plotting engine.

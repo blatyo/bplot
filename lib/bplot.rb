@@ -111,6 +111,16 @@ class BPlot
 		@pipe.puts "unset #{str}"
 	end
 	
+	# === Show
+	#
+	# The `set` command can be used to set *lots* of options.  No screen is
+	# drawn, however, until a plotting command is given. The *show* command
+	# shows their settings; show('all') shows all the settings.
+	#
+	def show(str)
+		@pipe.puts "show #{str}"
+	end
+	
 	#
 	# === Refresh
 	#

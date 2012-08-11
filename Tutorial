@@ -80,7 +80,13 @@ You can use "set" to set many global options. For example:
   b.set('title "A title for the whole plot"')
 
 As mentioned earlier, these settings will not be visible until you issue 
-another plotting command.
+another plotting command. However, you can find out their values using
+the *show* command:
+
+ b.show('terminal')
+ b.show('xrange')
+ b.show('title')
+
 
 === Refresh
 
@@ -112,7 +118,7 @@ options:
   b.plot(x, y, :title => "My Data", :color => "#33aa55")
 
 The colour can be specified as an RGB hex string ("#33aa55") or any colour
-name that Gnuplot recognizes. To see a full list type `show colornames`,
+name that Gnuplot recognizes. To see a full list type *b.show('colornames')*,
 but some examples include:
 
   red         dark-red        light-red          black         white
@@ -129,7 +135,7 @@ but some examples include:
   coral                       light-coral        grey100       gray100
 
 You can instruct BPlot to connect points with lines using the +:lines+
-option, and you coan configure the point style with the +:points+ option.
+option, and you can configure the point style with the +:points+ option.
 Both parameters take a style string that specifies the line-width/point-size
 and the line-type/point-type separated by a semicolon:
 
