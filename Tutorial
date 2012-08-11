@@ -272,10 +272,10 @@ strings (the style strings can be blank).
 
 
 Learning the compact style syntax is especially important for multiple plots because
-they named parameters like :title can only be included once in a plot command, and
+the named parameters like :title can only be included once in a plot command, and
 they always apply to the last data set only.
 
-There is also a *multiplot* method which can be "abused" to plot several differnet
+There is also a *multiplot* method which can be "abused" to plot several different
 data sets in the same plot, using several different plot commands.
 
   b.multiplot do
@@ -289,7 +289,7 @@ But the real power of *multiplot* is the ability to place several entirely separ
 plots on the same page, using any layout that you wish. To see an exaple of how this
 works, try the following examples:
 
-  b.multiplot('layout 1,3 title "Multiplot layout 1x3" ') do
+  b.multiplot('layout 1,3 title "Multiplot Example" ') do
     b.set('title "Quadratic"')
     b.plot(x, y1, :color => 'red',  :lines => '1;dashed')
     b.set('title "Linear"')
