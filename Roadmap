@@ -1,0 +1,38 @@
+= Roadmap
+
+== Version 0.0.3
+
+* X and Y error bars.
+
+* Variable, data-dependent point size.
+
+* Pie charts.
+
+* Get NVector working.
+
+* Movies with ffmpeg or avconv (or maybe also mencoder).
+
+== Version 0.0.4
+
+* Surface plots.
+
+* New methods: meshgrid(), splot(), surf(), mesh()
+
+== Version 0.0.5
+
+* Complete coverage of top level Gnuplot functions.
+
+* Proper testing on Windows and Mac.
+
+== Version 0.1.0 (milestone)
+
+* First release that is basically feature complete. It will
+  certainly need bugfixes and additions, but at this point
+  it should be be at least moderately stable.
+
+* From this point on, the API should be stable.
+
+* First beta release.
+
+
+

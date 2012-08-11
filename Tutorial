@@ -1,0 +1,306 @@
+= BPlot Tutorial (version 0.0.2)
+
+BPlot is a powerful scientific plotting module for SciRuby. It can produce
+high quality 2D (and soon 3D) plots thanks to its Gnuplot backend. Gnuplot
+is a mature free software tool for scientific plotting. BPlot presents a
+convenient API to SciRuby users and converts all instructions into Gnuplot
+commands.
+
+The BPlot API contains a mixture of Matlab features and Gnuplot features.
+The API provides a soft transition for users familiar with either one of
+these plotting tools. Over time, Matlab users are likelky to pick up some
+Gnuplot and Gnuplot users are likely to pick up some Matlab.
+
+
+== Status
+
+BPlot is in ALPHA status. Two dimensional plots seem to work well but they
+really need more testing. Surface plots and some other features are not
+implemented yet. Use at your own risk.
+
+
+== Installation
+
+BPlot is provided as a Ruby gem. Installation should be as easy as:
+
+  gem install bplot
+
+It is recommended that you install and use NMatrix, but BPlot is designed
+to also work with regular Ruby arrains. Therefore, NMatrix is not actually
+a dependency. That said, plotting is likely to be easier with NMatrix.
+
+
+== Getting Started
+
+After BPlot is properly installed, create a new program and insert the
+following:
+
+  require 'bplot'
+  
+  b = BPlot.new
+
+
+This code loads the BPlot module and creates an instance of BPLot. Every
+instance of BPlot has its own dedicated Gnuplot process. In this way, BPlot
+lets you control multiple Gnuplot processes from a single script.
+
+
+=== Raw commands
+
+Though not done often, BPlot lets you send raw commands into the Gnuplot
+backend. The *cmd* method allows you to bypass BPlot, so you can use any
+Gnuplot feature that is not implemented in BPlot.
+
+  b.cmd('plot sin(x) title "Plot without Ruby."')
+
+
+=== Settings
+
+The *set* and *unset* methods are thin wrappers around the Gnuplot commands
+of the same names. These methods can be used to set *A LOT* of options.
+However, nothing is drawn until the user issues a plotting command. You can
+use "set" to create any number of output files (postscript, png, svg, EPS
+with LaTeX, etc.).
+
+
+  b.set('terminal postscript enhanced color')
+  b.set('output "myplot.ps"')
+  
+  b.cmd('plot sin(x) title "Plot without Ruby."')
+  
+  b.set('terminal wxt')
+
+
+You can use "set" to set many global options. For example:
+
+  b.set('xrange [0:6]')
+  b.set('yrange [0:30]')
+  b.set('xlabel "This is the X Axis"')
+  b.set('ylabel "This is the Y Axis"')
+  b.set('title "A title for the whole plot"')
+
+As mentioned earlier, these settings will not be visible until you issue 
+another plotting command.
+
+=== Refresh
+
+This command reformats and redraws the current plot with the latest
+settings. This is useful for viewing a plot with different "set"
+options, or for generating the same plot for several output formats.
+
+  b.refresh
+
+
+=== 2D Plots
+
+By far the most important method is *plot*. This is the command that
+draws 2D plots using NMatrix objectts or Ruby arrays. This method has
+several optional parameters mostly related to the look of individual
+data sets (e.g. colour, line thickness, point style, etc.).
+
+==== Named parameters
+
+The most intuitive way to configure the *plot* command is with named
+parameter. The following example illustrates the +:title+ and +:color+
+options:
+
+  x = [1,2,3,4,5]
+  y = [1,4,9,16,25]
+  
+  b.plot(x, y)
+  b.plot(x, y, :title => "My Data", :color => "blue")
+  b.plot(x, y, :title => "My Data", :color => "#33aa55")
+
+The colour can be specified as an RGB hex string ("#33aa55") or any colour
+name that Gnuplot recognizes. To see a full list type `show colornames`,
+but some examples include:
+
+  red         dark-red        light-red          black         white
+  green       dark-green      light-green        grey0         gray0
+  blue        dark-blue       light-blue         grey10        gray10
+  cyan        dark-cyan       light-cyan         grey20        gray20
+  magenta     dark-magenta    light-magenta      grey30        gray30
+  grey        dark-grey       light-grey         grey40        gray40
+  gray        dark-gray       light-gray         grey50        gray50
+  pink        dark-pink       light-pink         grey60        gray60
+  orange      dark-orange     light-orange       grey70        gray70
+  yellow      dark-yellow                        grey80        gray80
+  violet      dark-violet                        grey90        gray90
+  coral                       light-coral        grey100       gray100
+
+You can instruct BPlot to connect points with lines using the +:lines+
+option, and you coan configure the point style with the +:points+ option.
+Both parameters take a style string that specifies the line-width/point-size
+and the line-type/point-type separated by a semicolon:
+
+  b.plot(x, y, :lines => "2;dashed", :points => "2;open-circle")
+  b.plot(x, y, :lines => "1;points", :points => "1.5;filled-square")
+
+You can leave either option blank. For example, `:lines => ";dashed"` defines
+a dashed line of the default thickness ("1"), while `:lines => "2;"` defines
+a line of width "2" of the default line type ("solid"). As shown in the example,
+sizes can be decimal. The valid line and point types are listed below in full:
+
+  Line Types                Point Types
+  ----------                -----------
+  solid                     +                   plus
+  dashed                    x                   cross
+  dots                      *                   star
+  dot-dashed                open-square         solid-square
+  dot-dot-dashed            open-circle         solid-circle
+                            open-diamond        solid-diamond
+                            open-up-triangle    solid-up-triangle
+                            open-down-triangle  solid-down-triangle
+
+==== Style strings
+
+As you write more plots, named parameters quickly become cumbersome. BPlot
+supports a powerful and compact style string that is derived from Matlab
+and Gnuplot. You can insert a single string with the syntax:
+
+  <-MATLAB-STRING-> ; <-DATA-TITLE-> ; <-GNUPLOT-STRING->
+
+The best way to learn this is to see it in action. The Matlab string can
+be used to set the colour, line style and point styles:
+
+  b.plot(x, y, 'r')
+  b.plot(x, y, 'g')
+  b.plot(x, y, 'm')
+  
+  b.plot(x, y, 'go')
+  b.plot(x, y, 'bs')
+  b.plot(x, y, 'm^')
+  
+  b.plot(x, y, 'r-')
+  b.plot(x, y, 'm--')
+  b.plot(x, y, 'k.-')
+  
+  b.plot(x, y, 'rd-')
+  b.plot(x, y, 'rv:')
+  b.plot(x, y, 'rh..-')
+
+
+The meaning of all the symbols available is described below:
+
+  Colours                         Line Styles
+  -------                         -----------
+  r   ==  red                     -     ==  solid
+  g   ==  green                   :     ==  dots
+  b   ==  blue                    --    ==  dashed
+  m   ==  magenta                 .-    ==  dot dashed
+  c   ==  cyan                    ..-   ==  dot dot dashed
+  y   ==  yellow
+  k   ==  black
+  
+  
+  Point Styles
+  ------------
+  +   ==  plus                \
+  x   ==  cross                \
+  *   ==  star                  \
+  o   ==  open circle            \ ___  Matlab styles with direct
+  s   ==  solid square           /      Gnuplot equivalents.
+  ^   ==  solid up triangle     /
+  v   ==  solid down triangle  /
+  d   ==  solid diamond       /
+  
+  <   ==  open up triangle     \
+  >   ==  open down triangle    \ ____  Matlab styles that were mapped
+  p   ==  open diamond          /       to a different Gnuplot style.
+  h   ==  solid circle         /
+  
+  q   ==  open square          \ _____  Non-Matlab style, inserted to add
+                               /        full coverage of Gnuplot styles.
+
+
+As in Matlab, you can add a title after a semicolon (e.g. "rh;My Plot;").
+You can also add a Gnuplot style string after the second semicolon. The
+Gnuplot string gives you access to the full power of Gnuplot. Try the
+examples below:
+
+  b.plot(x, y, 'rh;Quadratic')
+  b.plot(x, y, 'rh;Quadratic;ps 2')
+  
+  b.plot(x, y, 'ro--;y = x^2;ps 2 lw 2')
+  b.plot(x, y, 'rs.-;y = x^2;ps 1.5 lw 1')
+  
+  b.plot(x, y, 'r--;;smooth cspline')
+  b.plot(x, y, 'r--;;with steps')
+  b.plot(x, y, 'r- ;;with impulses')
+
+
+The Matlab portion of the string may some times disagree with the Gnuplot portion.
+For example 'rs--' implies that the plot should display both data points (drawn as
+squares) and lines (drawn as dashed lines). But what if the Gnuplot string specifies
+"with lines" (as opposed to "with linespoints")? If there is a disagreement, the
+Gnuplot instrucion takes presedence. For example:
+
+  b.plot(x, y, 'rs;;with linespoints')
+  b.plot(x, y, 'rs;;with steps')
+
+
+[Warning:] Do not enter a title in the Gnuplot style string. Doing so is not supported
+           and will fail when you least expect it. Use the method provided instead.
+
+==== Multiple plots
+
+You can have any number of data sets plotted in the same window, using the same
+"plot" command. To do this, simply include all the data sets separated by style
+strings (the style strings can be blank).
+
+
+  x  = [1,2,3,4,5]
+  y1 = [1,4,9,16,25]
+  y2 = [25,20,15,10,5]
+  y3 = [20,10,20,10,5]
+  
+  b.plot(x, y1, "", x, y2)
+  b.plot(x, y1, "", x, y2, "", x, y3)
+  b.plot(x, y1, 's;;ps 1',        x, y2, 'h;;ps 2',   x, y3, 'o;;ps 3 lw 1.5')
+  b.plot(x, y1, 's-;;ps 1',       x, y2, 'h--;;ps 2', x, y3, 'o:;;ps 3 lw 1.5')
+  b.plot(x, y1, 'ro--;Quadratic', x, y2, 'b^:;Linear')
+
+[Warning:] Resist the temptation of skipping the blank style strings. Doing so will
+           work for now, but will likely stop working soon, when I add support for
+           plotting error bars.
+
+
+Learning the compact style syntax is especially important for multiple plots because
+they named parameters like :title can only be included once in a plot command, and
+they always apply to the last data set only.
+
+There is also a *multiplot* method which can be "abused" to plot several differnet
+data sets in the same plot, using several different plot commands.
+
+  b.multiplot do
+    b.set('yrange [0:30]')
+    b.plot(x, y1, :color => 'red',  :lines => '1;dashed')
+    b.plot(x, y2, :color => 'blue', :lines => '1;dots')
+    b.plot(x, y3, :color => 'black',:points=> '3;open-circles')
+  end
+
+But the real power of *multiplot* is the ability to place several entirely separate
+plots on the same page, using any layout that you wish. To see an exaple of how this
+works, try the following examples:
+
+  b.multiplot('layout 1,3 title "Multiplot layout 1x3" ') do
+    b.set('title "Quadratic"')
+    b.plot(x, y1, :color => 'red',  :lines => '1;dashed')
+    b.set('title "Linear"')
+    b.plot(x, y2, :color => 'blue', :lines => '1;dots')
+    b.set('title "Zig Zag"')
+    b.plot(x, y3, 'ko--')
+  end
+
+== How to explore more: Gnuplot demos
+
+An excellent way to explore what you can do with BPlot is to go through the Gnuplot
+demos page:
+
+http://gnuplot.sourceforge.net/demo/
+
+Not everything in this page is implemented in BPlot, but this page is a great way
+to explore what's possible with Gnuplot, and Gnuplot ultimately determines what is
+possible with BPlot.
+
+

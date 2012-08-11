@@ -1,0 +1,52 @@
+=== Version 0.0.2
+
+* New plot API: The new API is incompatible with the old one, but it is
+  a major improvement. Now there are two ways to define plot styles:
+
+  * The syntax string method is more compact than the previous API.
+
+  * The named parameters are less compact but have an easier learning
+    curve than the previous API.
+
+
+* Moved documentation to rdoc.
+
+* Replaced the examples in the README with a full fleged Tutorial.
+
+* Started a ChangeLog and a Roadmap file.
+
+* Bugfix: Parse "with" command more reliably.
+
+* Replaced the "replot" command with "refresh" which is more appropiate
+  for plotting data streams like BPLot does.
+
+=== Version 0.0.1
+
+* Initial release of BPlot using Gnuplot as a backend plotting engine.
+
+[plot] Basic support for 2D plots. Includes setting the title and line
+       and point styles with Gnuplot and Matlab-like syntax:
+  
+         b = BPlot.new
+         b.plot( [1,2,3,4,5], [2,4,8,16,32], 'ps 2 lw 2', 'rh--', 'Exponential')
+         
+         b.plot(x, y, :title => 'Density', :gnuplot => 'lc 3 ps 1.5 lt 4 pt 5 w lp')
+         b.plot(x, y, :title => 'Density', :gnuplot => 'ps 1.5', :matlab => 'rh-')
+         b.plot(x, y, :t => 'Mass', :g => 'ps 2.5', :m => 'bh--')
+         
+         b.plot(x, y, 'ps 2', 'rh-', x, z, 'ps 1.5', 'bs--')
+         b.plot(x, y, 'ps 2', 'rh-', 'Quadratic', x, z, 'ps 1.5', 'bs--', 'Linear')
+
+
+[set] Support for plot settings via the Gnuplot 'set' command:
+
+         b.set('xrange [0:6]')
+         b.set('yrange [0:50]')
+
+[replot] Support for the Gnuplot 'replot' command:
+
+            b.replot
+
+[cmd] Support for sending raw instructions to the Gnuplot backend:
+
+         b.cmd('plot sin(x) tit "A plot without Ruby"')
