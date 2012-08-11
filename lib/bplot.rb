@@ -261,20 +261,25 @@ class BPlot
 			if opts[:lines]
 				lw, lt = opts[:lines].split(/;/)
 				
-				lw = 1  if lw == ''
+				lw = lw.to_i
+				lw = 1  if lw == 0
+				
 				lt = 1  if lt == '' or lt == nil
 				lt = 1  if lt.to_s =~ /solid/i
 				lt = 2  if lt.to_s =~ /dashed/i
-				lt = 3  if lt.to_s =~ /dots/i
+				lt = 3  if lt.to_s =~ /dot/i
 				lt = 4  if lt.to_s =~ /dot-dashed/i
 				lt = 5  if lt.to_s =~ /dot-dot-dashed/i
 				
-				style << " lw #{lw} lt #{lt} "
+				style << " lw #{lw} " if lw.is_a?(Fixnum)
+				style << " lt #{lt} " if lt.is_a?(Fixnum)
 			end
 			if opts[:points]
 				ps, pt = opts[:points].split(/;/)
 				
-				ps = 1  if ps == ''
+				ps = ps.to_i
+				ps = 1  if ps == 0
+				
 				pt = 1  if pt == ''
 				pt = 1  if pt == '+'
 				pt = 2  if pt == 'x' or pt == 'X'
@@ -282,18 +287,21 @@ class BPlot
 				pt = 1  if pt.to_s =~ /plus/i
 				pt = 2  if pt.to_s =~ /cross/i
 				pt = 3  if pt.to_s =~ /star/i
-				pt = 4  if pt.to_s =~ /open-square/i
-				pt = 5  if pt.to_s =~ /solid-square/i
-				pt = 6  if pt.to_s =~ /open-circle/i
-				pt = 7  if pt.to_s =~ /solid-circle/i
-				pt = 8  if pt.to_s =~ /open-up-triangle/i
-				pt = 9  if pt.to_s =~ /solid-up-triangle/i
-				pt = 10 if pt.to_s =~ /open-down-triangle/i
-				pt = 11 if pt.to_s =~ /solid-down-triangle/i
-				pt = 12 if pt.to_s =~ /open-diamond/i
-				pt = 13 if pt.to_s =~ /solid-diamond/i
 				
-				style << " ps #{ps} pt #{pt} "
+				pt = 4  if pt.to_s =~ /open-square/i
+				pt = 6  if pt.to_s =~ /open-circle/i
+				pt = 12 if pt.to_s =~ /open-diamond/i
+				pt = 8  if pt.to_s =~ /open-up-triangle/i
+				pt = 10 if pt.to_s =~ /open-down-triangle/i
+				
+				pt = 5  if pt.to_s =~ /solid-square/i
+				pt = 7  if pt.to_s =~ /solid-circle/i
+				pt = 13 if pt.to_s =~ /solid-diamond/i
+				pt = 9  if pt.to_s =~ /solid-up-triangle/i
+				pt = 11 if pt.to_s =~ /solid-down-triangle/i
+				
+				style << " ps #{ps} " if ps.is_a?(Fixnum)
+				style << " pt #{pt} " if pt.is_a?(Fixnum)
 			end
 			
 			#

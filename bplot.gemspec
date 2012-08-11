@@ -1,6 +1,6 @@
 Gem::Specification.new do |gem|
   gem.name        = 'bplot'
-  gem.version     = '0.0.2'
+  gem.version     = '0.0.2.2'
   gem.date        = '2012-08-11'
   gem.summary     = 'A ploting module for SciRuby with a Gnuplot backend.'
   gem.description = 'A 2D and 3D plotting module for SciRuby that uses syntax from Gnuplot and to a lesser degree Matlab.'
