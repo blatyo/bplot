@@ -32,8 +32,8 @@ a dependency. That said, plotting is likely to be easier with NMatrix.
 
 == Getting Started
 
-After BPlot is properly installed, create a new program and insert the
-following:
+After installation, start the Ruby shell with the command "irb" (if you have
+Ruby version 1.8, type "irb -rubygems"). Then type the following:
 
   require 'bplot'
   
