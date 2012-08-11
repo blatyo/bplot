@@ -1,12 +1,12 @@
 Gem::Specification.new do |gem|
   gem.name        = 'bplot'
-  gem.version     = '0.0.1'
-  gem.date        = '2012-08-07'
+  gem.version     = '0.0.2'
+  gem.date        = '2012-08-11'
   gem.summary     = 'A ploting module for SciRuby with a Gnuplot backend.'
   gem.description = 'A 2D and 3D plotting module for SciRuby that uses syntax from Gnuplot and to a lesser degree Matlab.'
   gem.authors     = ["Daniel Carrera"]
   gem.email       = 'dcarrera@gmail.com'
-  gem.files       = ["README", "LICENSE", "lib/bplot.rb"]
+  gem.files       = ["README", "LICENSE", "Tutorial","ChangeLog","Roadmap", "lib/bplot.rb"]
   gem.homepage    = 'http://rubygems.org/gems/bplot'
   gem.post_install_message = <<-EOF
 ***********************************************************
@@ -28,57 +28,23 @@ Welcome to BPlot: A plotting module for SciRuby!
               *** WARNING ***
 
 BPlot is in ALPHA status. Two dimmensional plots seem to work
-well but they really need more testing. Surface plots and some
-other features are not implemented yet.
+well but they really need more testing. Many features such as
+surface plots have not been implemented yet. The backend uses
+Gnuplot, so you must have Gnuplot installed and in your PATH.
 
-BPlot uses Gnuplot as the plotting engine, so you need to have
-Gnuplot installed and in your PATH. BPlot lets you use straight
-Gnuplot commands, but it also borrows some useful style syntax
-from Matlab to make plotting even better.
+The plotting command mixes Matlab and Gnuplot syntax. The addition
+of Matlab syntax to Gnuplot makes plotting immensely easier while
+still retaining the power of Gnuplot. BPlot provides a comfortable
+environment for Matlab and Gnuplot users. Matlab users will learn
+some Gnuplot and Gnuplot users will leran some Matlab.
 
-BPlot can work with either NMatrix objects or with plain Ruby
-arrays. Try some of the commands below to get a feel of how
-it works:
+Don't forget to read the tutorial!
 
-require 'bplot'
+BPlot comes with a nice tutorial that documents every feature.
+If you don't have a copy of the tutorial, you can get one here:
 
-x = [1,2,3,4,5]
-y = [1,4,9,16,25]
-z = [25,20,15,10,5]
+https://github.com/dcarrera/bplot/blob/master/Tutorial
 
-b = BPlot.new
-
-# Send a raw command into Gnuplot.
-b.cmd('plot sin(x) title "Plot without Ruby."')
-
-# Gnuplot 'set' command.
-b.set('xrange [0:6]')
-b.set('yrange [0:30]')
-b.set('title "Heading for the entire plot"')
-
-# Gnuplot 'replot' command.
-b.replot
-
-# Basic plots.
-b.plot(x, y)
-b.plot(x, y, 'ps 2', 'rh')
-b.plot(x, y, 'ps 2', 'rh--', 'y = x^2')
-
-# The 'with' command on the gnuplot string takes precedence.
-b.plot(x, y, 'ps 2 w lp', 'rh')
-b.plot(x, y, 'ps 2 with steps', 'rh')
-
-# Named parameters.
-b.plot(x, y, :title => 'Mass', :gnuplot => 'ps 1.5', :matlab => 'rh-')
-b.plot(x, y, :t => 'Mass', :g => 'ps 2.5', :m => 'rh-')
-
-# Multiple data sets (need not be the same length).
-b.plot(x, y, 'ps 2', 'rh-', x, z, 'ps 1.5', 'bs--')
-b.plot(x, y, 'ps 2', 'rh-', 'Quadratic', x, z, 'ps 1.5', 'bs--', 'Linear')
-
-# Named parameters only allowed for the last data set.
-b.plot(x, y, 'ps 2', 'rh-',       'Quadratic', x, z, 'ps 1.5', 'bs--', :t => 'Linear') # OK.
-b.plot(x, y, 'ps 2', 'rh-', :t => 'Quadratic', x, z, 'ps 1.5', 'bs--',       'Linear') # ERROR.
 
 ***********************************************************
 EOF
