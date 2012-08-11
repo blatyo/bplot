@@ -140,7 +140,7 @@ Both parameters take a style string that specifies the line-width/point-size
 and the line-type/point-type separated by a semicolon:
 
   b.plot(x, y, :lines => "2;dashed", :points => "2;open-circle")
-  b.plot(x, y, :lines => "1;points", :points => "1.5;filled-square")
+  b.plot(x, y, :lines => "1;dots",   :points => "1.5;filled-square")
 
 You can leave either option blank. For example, `:lines => ";dashed"` defines
 a dashed line of the default thickness ("1"), while `:lines => "2;"` defines
