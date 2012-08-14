@@ -48,4 +48,7 @@ https://github.com/dcarrera/bplot/blob/master/Tutorial
 
 ***********************************************************
 EOF
+
+  gem.add_development_dependency 'rspec', [">= 0"]
+  gem.add_development_dependency 'bundler', [">= 0"]
 end
