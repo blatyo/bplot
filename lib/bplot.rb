@@ -53,7 +53,7 @@ class BPlot
 		#
 		# Every instance of BPlot has its own gnuplot process.
 		#
-		@pipe = IO.popen("gnuplot","w")
+		@pipe = IO.popen("gnuplot -p","w")
 		
 		#
 		# Configure Gnuplot.
@@ -172,15 +172,19 @@ class BPlot
 	# method is currently in a state of flux and is for the moment undocumented.
 	def plot(*args)
 		
-		data = []
+		all_data = []
 		all_plots = ''
 		while args.length > 0
 			#
 			# NEXT PLOT
 			#
-			# First two values are the (x,y) points.
-			data << args.shift
-			data << args.shift
+			# Anything that is of class Array or NMatrix is data.
+			this_data = []
+			while args[0].class == 'Array' or args[0].class == 'NMatrix'
+				this_data << args.shift
+			end
+			
+			all_data << this_data
 			
 			# - Get the settings for this plot.
 			# - If 'args' is not empty, there is another plot.
@@ -197,15 +201,27 @@ class BPlot
 		#
 		# Each plot needs a separate stream of data separated by 'e' ("end").
 		#
-		nstreams = data.length / 2
+		nblocks = all_data.length
 		
-		stream = (1..nstreams).map { |s|
-			x = data.shift
-			y = data.shift
-			n = x.is_a?(Array) ? x.length - 1 : x.shape[0] - 1
+		stream = (1..nblocks).map { |s|
 			
-			(0..n).map { |i| "#{x[i]}	#{y[i]}\n" }.join + "e\n"
+			ncols = all_data[s].length
+			nrows = all_data[s][0].class == 'Array' ? all_data[s][0].length
+			                                        : all_data[s][0].shape[0] - 1
+			
+			(0..nrows).map { |r|
+			(0..ncols).map { |c|  "     " + all_data[s][c][r]
+			}.join + "\n"
+			}.join + "e\n"
 		}.join
+		
+#		stream = (1..nstreams).map { |s|
+#			x = data.shift
+#			y = data.shift
+#			n = x.is_a?(Array) ? x.length - 1 : x.shape[0] - 1
+#			
+#			(0..n).map { |i| "#{x[i]}	#{y[i]}\n" }.join + "e\n"
+#		}.join
 		
 		@pipe.puts "plot #{all_plots} \n#{stream}"
 	end
